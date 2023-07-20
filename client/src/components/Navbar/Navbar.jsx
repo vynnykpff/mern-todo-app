@@ -2,17 +2,15 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import NavbarBlock from 'react-bootstrap/Navbar';
 import {home, login, registration} from '../../shared/constants/routes';
-import { NavLink } from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 import {useAuth} from "../../hooks/useAuth.js";
 
 const Navbar = () => {
-	const {token} = useAuth();
+	const {token, logout} = useAuth();
 
 	const handleClick = () => {
-		if (!!token) {
-			localStorage.removeItem('userData');
-		}
-
+		localStorage.removeItem('userData');
+		logout();
 	};
 
 	return (
@@ -22,11 +20,20 @@ const Navbar = () => {
 					<NavLink to={home}>
 						<NavbarBlock.Brand>MERN Todo App</NavbarBlock.Brand>
 					</NavLink>
-
 					<Nav>
-						<NavLink onClick={handleClick} to={!!token ? registration : login} className='text-[#ffffff8c] p-2 font-medium'>
-							{!!token ? 'Logout' : 'Login'}
-						</NavLink>
+						{!!token ?
+							<NavLink
+								onClick={handleClick}
+								to={login}
+								className='text-[#ffffff8c] p-2 font-medium'>
+								Logout
+							</NavLink>
+							: <NavLink
+								to={registration}
+								className='text-[#ffffff8c] p-2 font-medium'>
+								Login
+							</NavLink>
+						}
 					</Nav>
 				</Container>
 			</NavbarBlock>

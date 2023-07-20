@@ -1,7 +1,7 @@
-import { Route, Routes } from 'react-router-dom';
+import {Route, Routes} from 'react-router-dom';
 import Layout from './components/Layout/Layout';
-import { all, home, login, register } from './shared/constants/routes';
-import { lazy } from 'react';
+import {all, home, login, registration} from './shared/constants/routes';
+import {lazy} from 'react';
 
 const AuthPage = lazy(() => import('./pages/AuthPage/AuthPage.jsx'));
 const RegisterPage = lazy(() =>
@@ -16,7 +16,7 @@ const App = () => {
 		<Routes>
 			<Route path={home} element={<Layout />}>
 				<Route path={login} element={<AuthPage />} />
-				<Route path={register} element={<RegisterPage />} />
+				<Route path={registration} element={<RegisterPage />} />
 				<Route path={all} element={<NotFoundPage />} />
 			</Route>
 		</Routes>

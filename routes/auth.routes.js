@@ -76,7 +76,7 @@ router.post('/login',
 				{expiresIn: "1h"}
 			)
 
-			res.json({token, userId});
+			res.json({token, userId: user._id});
 
 		} catch (e) {
 			console.error('Error occurred during registration:', e)

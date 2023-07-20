@@ -1,14 +1,23 @@
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
-import { register } from '../../shared/constants/routes';
 import { Link } from 'react-router-dom';
+import {useDispatch, useSelector} from "react-redux";
+import {setUserPayload} from "../../store/user-payload/userPayload.slice.js";
+import {registration} from "../../shared/constants/routes.js";
 
 const AuthPage = () => {
+	const state = useSelector(state => state.userPayload)
+	const dispatch = useDispatch();
+
+	const handleChange = (e) => {
+		dispatch(setUserPayload({...state, [e.target.name]: e.target.value}));
+	}
+
 	return (
 		<div className='mx-auto text-center w-[550px]'>
 			<h3 className='text-3xl font-medium mb-4'>Authorization</h3>
-			<form className='form form-login'>
+			<form className='form form-login' onSubmit={(e) => e.preventDefault()}>
 				<div className='row'>
 					<label htmlFor='email' className='text-xl mb-2'>
 						Email
@@ -20,6 +29,7 @@ const AuthPage = () => {
 							name='email'
 							autoComplete='user-email'
 							required
+							onChange={handleChange}
 						/>
 						<Form.Control.Feedback type='invalid'>
 							Please input a email.
@@ -35,6 +45,7 @@ const AuthPage = () => {
 							name='password'
 							autoComplete='current-password'
 							required
+							onChange={handleChange}
 						/>
 						<Form.Control.Feedback type='invalid'>
 							Please input a password.
@@ -48,7 +59,7 @@ const AuthPage = () => {
 						type='button'
 						value='Enter'
 					/>
-					<Link to={register} className='text-blue-500 text-lg'>
+					<Link to={registration} className='text-blue-500 text-lg'>
 						You don't have account?
 					</Link>
 				</div>

@@ -1,8 +1,8 @@
 export const ROUTES = {
 	home: '/',
 	login: '/login',
-	register: '/register',
+	registration: '/registration',
 	all: '*',
 };
 
-export const { home, login, register, all } = ROUTES;
+export const { home, login, registration, all } = ROUTES;

@@ -1,8 +1,11 @@
+require('dotenv').config();
 const {Router} = require('express');
 const router = Router();
 const User = require('../models/User');
 const {check, validationResult} = require('express-validator');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 
 router.post('/registration',
 	[
@@ -33,6 +36,47 @@ router.post('/registration',
 
 			res.status(201).json({message: 'User registration successful'});
 
+
+		} catch (e) {
+			console.error('Error occurred during registration:', e)
+		}
+	})
+
+router.post('/login',
+	[
+		check('email', 'Invalid email').isEmail(),
+		check('password', 'Invalid password').exists(),
+	],
+
+	async (req, res) => {
+		try {
+			const errors = validationResult(req);
+			if (!errors.isEmpty()) {
+				return res.status(400).json({errors: errors.array(), message: 'Invalid data received'});
+			}
+			const {email, password} = req.body;
+
+			const user = await User.findOne({email});
+
+			if (!user) {
+				return res.status(400).json({message: "This email does not in system"})
+			}
+
+			const isMatch = bcrypt.compare(password, user.password);
+
+			if (!isMatch) {
+				return res.status(400).json({message: 'Invalid password'});
+			}
+
+			const jwtSecret = process.env.JWT_KEY;
+
+			const token = jwt.sign(
+				{userId: user._id},
+				jwtSecret,
+				{expiresIn: "1h"}
+			)
+
+			res.json({token, userId});
 
 		} catch (e) {
 			console.error('Error occurred during registration:', e)
